@@ -43,7 +43,7 @@ CLASS_NAMES = (
     "NonDemented",
     "VeryMildDemented",
 )
-IMAGE_SIZE = (208, 176)  # height, width used by the training notebook
+IMAGE_SIZE = (176, 208)  # height, width used by the training notebook
 MAX_UPLOAD_BYTES = 10 * 1024 * 1024
 USERNAME_PATTERN = re.compile(r"^[A-Za-z0-9_.-]{3,50}$")
 SYSTEM_PROMPT = (
