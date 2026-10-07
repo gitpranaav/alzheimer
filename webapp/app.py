@@ -32,7 +32,10 @@ from werkzeug.utils import secure_filename
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent
-MODEL_PATH = Path(os.getenv("MODEL_PATH", BASE_DIR / "models" / "full_model.keras"))
+configured_model_path = os.getenv("MODEL_PATH", "models/full_model.keras")
+MODEL_PATH = Path(configured_model_path)
+if not MODEL_PATH.is_absolute():
+    MODEL_PATH = BASE_DIR / MODEL_PATH
 ALLOWED_EXTENSIONS = {"jpg", "jpeg", "png"}
 CLASS_NAMES = (
     "MildDemented",
