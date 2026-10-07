@@ -1,0 +1,55 @@
+# Secrets and local configuration
+.env
+.env.*
+kaggle.json
+*.pem
+*.key
+
+# Python and notebook-generated files
+.venv/
+venv/
+env/
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+
+# Downloaded datasets and archives
+dataset/
+dataset-*/
+Alzheimer_s Dataset/
+archive/
+*.zip
+*.tar
+*.tar.gz
+*.7z
+
+# Trained models and local databases
+*.keras
+*.h5
+*.pkl
+*.db
+
+# Uploaded/generated images and potentially sensitive scans
+static/uploads/
+*.jpg
+*.jpeg
+*.png
+*.webp
+
+# Reports and office documents
+*.pdf
+*.doc
+*.docx
+*.odt
+*.rtf
+*.ppt
+*.pptx
+*.xls
+*.xlsx
+
+# Editor and operating-system files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+tempCodeRunnerFile.py
