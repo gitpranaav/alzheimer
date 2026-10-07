@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Image</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            min-height: 92vh;
+            background-color: #f0f4f8;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 0;
+            margin: 0;
+            margin-top:30px;
+        }
+        .intro {
+            max-width: 900px;
+            margin: 0 auto;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            background-color: #ffffff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        }
+        .header h1 {
+            color: #636a72;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .header p {
+            color: #917d7d;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+        .upload-container {
+            background-color: #f9fbfd;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 400px;
+            margin-top: 20px;
+            box-shadow: 1px 4px 6px black;
+        }
+        .upload-container h2 {
+            color: #007bff;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
+        .upload-container input[type="file"] {
+            display: none;
+        }
+        .upload-container label {
+            display: inline-block;
+            padding: 10px 20px;
+            color: white;
+            background-color: #007bff;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .upload-container label:hover {
+            background-color: #0056b3;
+        }
+        .upload-container input[type="submit"] {
+            margin-top: 20px;
+            padding: 10px 20px;
+            border: none;
+            background-color: #28a745;
+            color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .upload-container input[type="submit"]:hover {
+            background-color: #218838;
+        }
+        #chat-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            cursor: pointer;
+            width: 50px;
+            height: 50px;
+            background-color: #007bff;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 30px;
+        }
+        #chat-window {
+            display: none;
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            height: 400px;
+            background-color: #ece6e6;
+            border: 1px solid #ccc;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            padding: 10px;
+            overflow-y: auto;
+            flex-direction: column;
+            border-radius: 6px;
+        }
+        #chat-content {
+            flex: 1;
+            overflow-y: auto;
+        }
+        .message {
+            margin: 5px 0;
+            padding: 10px;
+            max-width: 85%;
+            border-radius: 16px;
+        }
+        .user-message {
+            background-color: #adffd9;
+            align-self: flex-end;
+        }
+        .bot-message {
+            background-color: #ecf9f2;
+            align-self: flex-start;
+        }
+        #chat-input {
+            width: calc(100% - 100px);
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 9px;
+            margin-right: 5px;
+        }
+        button {
+            width: 80px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            border-radius: 9px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Custom scrollbar styling for WebKit browsers */
+        #chat-content::-webkit-scrollbar {
+            width: 8px; /* Width of the scrollbar */
+        }
+
+        #chat-content::-webkit-scrollbar-track {
+            background: #cccaca; /* Background color of the scrollbar track */
+            border-radius: 10px; /* Rounded corners for the scrollbar track */
+        }
+
+        #chat-content::-webkit-scrollbar-thumb {
+            background: #161616; /* Color of the scrollbar thumb */
+            border-radius: 10px; /* Rounded corners for the scrollbar thumb */
+        }
+
+        #chat-content::-webkit-scrollbar-thumb:hover {
+            background: #0056b3; /* Color when hovering over the scrollbar thumb */
+        }
+
+        /* Custom scrollbar styling for Firefox */
+        #chat-content {
+            scrollbar-width: thin; /* Thin scrollbar */
+            scrollbar-color: #161616 #cccaca; /* Thumb and track color */
+        }
+    </style>
+</head>
+<body>
+
+    <div style="position: absolute; top: 10px; left: 10px;">
+        <a href="{{ url_for('dashboard') }}">
+            <button>Go to Dashboard</button>
+        </a>
+    </div>
+
+    <div class="intro">
+        <div class="header">
+            <h1>Alzheimers Predictive System</h1>
+            <p>This research prototype classifies Alzheimer MRI images and produces a saliency map showing influential pixels. It is not a medical diagnostic service.</p>
+        </div>
+        <div class="upload-container">
+            <h2>Upload Image</h2>
+            <form method="post" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                <label for="file">Choose File</label>
+                <input type="file" name="file" id="file" accept=".jpg,.jpeg,.png,image/jpeg,image/png" required>
+                <br>
+                <input type="submit" value="Upload">
+            </form>
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% for category, message in messages %}
+                    <p role="alert" class="{{ category }}">{{ message }}</p>
+                {% endfor %}
+            {% endwith %}
+        </div>
+    </div>
+    <div id="chat-icon" onclick="toggleChat()">💬</div>
+    <div id="chat-window">
+        <div id="chat-content"></div>
+        <div style="display: flex; margin-top: auto;">
+            <input type="text" id="chat-input" placeholder="Type your message..." onkeydown="handleKeyDown(event)">
+            <button onclick="sendMessage()">Send</button>
+        </div>
+    </div>
+    <script>
+        function toggleChat() {
+            var chatWindow = document.getElementById('chat-window');
+            chatWindow.style.display = chatWindow.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        const csrfToken = "{{ csrf_token() }}";
+
+        function addMessage(label, text, className) {
+            const message = document.createElement('div');
+            message.className = `message ${className}`;
+            const strong = document.createElement('strong');
+            strong.textContent = `${label}: `;
+            message.appendChild(strong);
+            message.appendChild(document.createTextNode(text));
+            document.getElementById('chat-content').appendChild(message);
+        }
+
+        function sendMessage() {
+            const inputElement = document.getElementById('chat-input');
+            const input = inputElement.value;
+            if (input.trim() === '') return; // Ignore empty input
+
+            const chatContent = document.getElementById('chat-content');
+            addMessage('You', input, 'user-message');
+
+            // Send message to server
+            fetch('/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': csrfToken
+                },
+                body: JSON.stringify({ message: input })
+            })
+            .then(async response => {
+                const data = await response.json();
+                if (!response.ok) throw new Error(data.error || 'Chat request failed.');
+                return data;
+            })
+            .then(data => {
+                addMessage('Bot', data.response, 'bot-message');
+                chatContent.scrollTop = chatContent.scrollHeight;
+            })
+            .catch(error => addMessage('Error', error.message, 'bot-message'));
+
+            // Clear input field
+            inputElement.value = '';
+        }
+        function handleKeyDown(event) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission if inside a form
+                sendMessage();
+            }
+        }
+    </script>
+</body>
+</html>

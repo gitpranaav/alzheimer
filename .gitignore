@@ -1,6 +1,7 @@
 # Secrets and local configuration
 .env
 .env.*
+!webapp/.env.example
 kaggle.json
 *.pem
 *.key
@@ -31,6 +32,8 @@ archive/
 
 # Uploaded/generated images and potentially sensitive scans
 static/uploads/
+webapp/instance/
+webapp/models/
 *.jpg
 *.jpeg
 *.png
